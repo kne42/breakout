@@ -1,4 +1,4 @@
-#include "breakout-core.hpp"
+#include "brick.hpp"
 
 void brick_data::draw(color colour) const
 {

@@ -1,0 +1,26 @@
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 1100;
+
+const int BRICK_AREA_WIDTH = SCREEN_WIDTH;
+const int BRICK_AREA_HEIGHT = 600;
+
+const int NUM_BRICK_COLS = 14;
+const int NUM_BRICK_ROWS = 8;
+
+const int BRICK_OFFSET = 0;
+const int BRICK_GAP = 10;
+const int BRICK_WIDTH = (BRICK_AREA_WIDTH - ((NUM_BRICK_COLS - 1) * BRICK_GAP)) * NUM_BRICK_COLS;
+const int BRICK_HEIGHT = (BRICK_AREA_HEIGHT - ((NUM_BRICK_ROWS - 1) * BRICK_GAP)) * NUM_BRICK_ROWS;
+
+const int BALL_SIZE = 30;
+
+const int PADDLE_SPEED = 10;
+const int PADDLE_HEIGHT = 100;
+const int PADDLE_WIDTH = 300;
+const int PADDLE_Y = SCREEN_HEIGHT - 300;
+const int PADDLE_STARTING_X = SCREEN_WIDTH / 2;
+
+#endif
