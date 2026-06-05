@@ -9,21 +9,23 @@
 
 class game_data
 {
-    bool coop_mode;
-    bool level_two;
-    brick_data bricks[NUM_BRICK_ROWS][NUM_BRICK_COLS];
+    int active_player;
+    bool two_players;
+    bool level_two[2];
+    int score[2];
+    unsigned short lives[2];
+
+    brick_data bricks[2][NUM_BRICK_ROWS][NUM_BRICK_COLS];
     ball_data ball;
-    paddle_data paddle_p1;
-    paddle_data paddle_p2;
-    int score;
-    unsigned short lives;
+    paddle_data paddle;
 
 public:
     game_data();
-    bool is_coop_mode();
-    void new_game(bool coop_mode);
+    void new_game(bool two_players);
     void update();
     void draw();
+    int lose_life();
+    void reset_difficulty();
 };
 
 #endif
