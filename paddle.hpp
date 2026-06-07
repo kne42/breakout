@@ -11,6 +11,7 @@ class paddle_data : unit
 public:
     paddle_data();
     int get_width();
+    void set_shrunken(bool shrunken);
     void reset();
 };
 

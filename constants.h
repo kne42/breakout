@@ -5,18 +5,20 @@
 
 enum speed_thresholds
 {
-    NONE = 3,
-    FOUR_HITS = 6,
-    TWELVE_HITS = 12,
-    ORANGE_ROW = 16,
-    RED_ROW = 32,
+    DIFFICULTY_NONE = 3,
+    DIFFICULTY_FOUR_HITS = 6,
+    DIFFICULTY_TWELVE_HITS = 12,
+    DIFFICULTY_ORANGE_ROW = 16,
+    DIFFICULTY_RED_ROW = 32,
 };
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 1100;
 
 const int BRICK_AREA_WIDTH = SCREEN_WIDTH;
-const int BRICK_AREA_HEIGHT = 600;
+const int BRICK_AREA_Y_START = 200;
+const int BRICK_AREA_Y_END = 800;
+const int BRICK_AREA_HEIGHT = BRICK_AREA_Y_END - BRICK_AREA_Y_START;
 
 const int NUM_BRICK_COLS = 14;
 const int NUM_BRICK_ROWS = 8;
@@ -41,5 +43,7 @@ const int PADDLE_STARTING_X = SCREEN_WIDTH / 2;
 const color PADDLE_COLOUR = color(0, 130 / 255, 200 / 255);
 const color BACKGROUND_COLOUR = COLOR_BLACK;
 const color OTHER_COLOURS = color(0, 0, 0, 210 / 255);
+
+const int STARTING_LIVES = 3;
 
 #endif

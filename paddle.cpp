@@ -10,10 +10,15 @@ paddle_data::paddle_data()
     reset();
 }
 
+void paddle_data::set_shrunken(bool shrunken)
+{
+    this->shrunken = shrunken;
+}
+
 void paddle_data::reset()
 {
     set_x(PADDLE_STARTING_X);
-    shrunken = false;
+    set_shrunken(false);
 }
 
 int paddle_data::get_width()

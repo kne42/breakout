@@ -10,6 +10,7 @@ class brick_data : unit
     int col;
 
 public:
+    brick_data();
     brick_data(int row, int col);
 
     bool is_broken() const;

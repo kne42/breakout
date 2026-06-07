@@ -49,6 +49,32 @@ double unit::get_y() const
 
 coordinates unit::calculate_edge(edge edges) const
 {
-    // TODO: implement me
-    return pos;
+    coordinates edge;
+    if (edges & EDGE_TOP)
+    {
+        edge.y = get_y();
+    }
+    else if (edges & EDGE_BOTTOM)
+    {
+        edge.y = get_y() + get_height();
+    }
+    else
+    {
+        edge.y = get_y() + get_height() / 2;
+    }
+
+    if (edges & EDGE_LEFT)
+    {
+        edge.x = get_x();
+    }
+    else if (edges & EDGE_RIGHT)
+    {
+        edge.x = get_x() + get_width();
+    }
+    else
+    {
+        edge.x = get_x() + get_width() / 2;
+    }
+
+    return edge;
 }

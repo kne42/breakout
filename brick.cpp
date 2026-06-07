@@ -1,6 +1,11 @@
 #include "brick.hpp"
 #include "constants.h"
 
+brick_data::brick_data()
+{
+    broken = true;
+}
+
 brick_data::brick_data(int row, int col)
 {
     this->row = row;
