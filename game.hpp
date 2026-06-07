@@ -1,6 +1,8 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include "splashkit.h"
+
 #include "unit.hpp"
 #include "brick.hpp"
 #include "ball.hpp"
@@ -8,6 +10,7 @@
 #include "constants.h"
 
 using brick_func = void (*)(brick_data &brick, int row, int col);
+using const_brick_func = void (*)(const brick_data &brick, int row, int col);
 
 class game_data
 {
@@ -22,14 +25,17 @@ class game_data
     paddle_data paddle;
 
     void bricks_map(int player, brick_func func);
+    void bricks_map(int player, const_brick_func func) const;
+    static void draw_brick(const brick_data &brick, int row, int col);
     static void init_brick(brick_data &brick, int row, int col);
+    void draw_walls(color colour, int y, int height) const;
 
 public:
     game_data();
     game_data(bool two_players);
     void new_game(bool two_players);
     void update();
-    void draw();
+    void draw() const;
     int lose_life();
     void reset_difficulty();
     int swap_players();

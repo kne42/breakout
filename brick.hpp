@@ -3,7 +3,7 @@
 
 #include "unit.hpp"
 
-class brick_data : unit
+class brick_data : public unit
 {
     bool broken;
     int row;

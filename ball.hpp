@@ -3,7 +3,7 @@
 
 #include "unit.hpp"
 
-class ball_data : unit
+class ball_data : public unit
 {
     coordinates velocity_vector;
     float velocity_multiplier;

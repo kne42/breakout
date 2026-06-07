@@ -3,7 +3,7 @@
 
 #include "unit.hpp"
 
-class paddle_data : unit
+class paddle_data : public unit
 {
     int speed;
     bool shrunken;

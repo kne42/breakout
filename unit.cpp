@@ -1,3 +1,5 @@
+#include "splashkit.h"
+
 #include "unit.hpp"
 
 void unit::set_pos(const coordinates &pos)
@@ -77,4 +79,11 @@ coordinates unit::calculate_edge(edge edges) const
     }
 
     return edge;
+}
+
+// GUI
+
+void unit::draw(color colour) const
+{
+    fill_rectangle(colour, get_x(), get_y(), get_width(), get_height());
 }
