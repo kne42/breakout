@@ -39,6 +39,11 @@ public:
     double get_x() const;
     double get_y() const;
     coordinates calculate_edge(edge edges) const;
+
+    double get_left() const;
+    double get_right() const;
+    double get_top() const;
+    double get_bottom() const;
 };
 
 #endif

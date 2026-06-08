@@ -25,14 +25,14 @@ class game_data
     ball_data ball;
     paddle_data paddle;
 
-    static void init_brick(brick_data &brick, int row, int col);
+    void bricks_map(int player, brick_func func);
 
 public:
     game_data();
     game_data(int max_serves);
     void new_game(bool two_players);
     void update();
-    void reset_difficulty();
+    void reset();
     int swap_players();
     void new_round();
 
@@ -42,7 +42,6 @@ public:
     int get_serve() const;
     int get_score(int player) const;
 
-    void bricks_map(int player, brick_func func);
     void bricks_map(int player, const_brick_func func) const;
 };
 

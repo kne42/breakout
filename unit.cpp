@@ -78,3 +78,23 @@ coordinates unit::calculate_edge(edge edges) const
 
     return edge;
 }
+
+double unit::get_left() const
+{
+    return get_x();
+}
+
+double unit::get_right() const
+{
+    return get_x() + get_width();
+}
+
+double unit::get_top() const
+{
+    return get_y();
+}
+
+double unit::get_bottom() const
+{
+    return get_y() + get_height();
+}

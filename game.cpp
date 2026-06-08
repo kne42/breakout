@@ -25,9 +25,14 @@ void game_data::bricks_map(int player, const_brick_func func) const
     }
 }
 
-void game_data::init_brick(brick_data &brick, int row, int col)
+void init_brick(brick_data &brick, int row, int col)
 {
     brick = brick_data(row, col);
+}
+
+void reset_brick(brick_data &brick, int row, int col)
+{
+    brick.reset();
 }
 
 game_data::game_data() : game_data(3) {}
@@ -35,6 +40,9 @@ game_data::game_data() : game_data(3) {}
 game_data::game_data(int max_serves)
 {
     this->max_serves = max_serves;
+    bricks_map(0, init_brick);
+    bricks_map(1, init_brick);
+
     new_game(false);
 }
 
@@ -56,15 +64,28 @@ void game_data::new_game(bool two_players)
         level_two[player] = false;
         current_serve[player] = 1;
 
-        bricks_map(player, init_brick);
+        bricks_map(player, reset_brick);
     }
 }
 
 void game_data::update()
 {
+    // detect wall collisions
+    if (ball.get_left() <= 0 || ball.get_right() >= SCREEN_WIDTH)
+    {
+        ball.reflect_x();
+    }
+
+    if (ball.get_top() <= DIVIDER_END || ball.get_bottom() >= SCREEN_HEIGHT)
+    {
+        ball.reflect_y();
+    }
+
+    // handle ball move
+    ball.move_next_pos();
 }
 
-void game_data::reset_difficulty()
+void game_data::reset()
 {
 }
 
@@ -87,6 +108,7 @@ paddle_data game_data::get_paddle() const
 {
     return paddle;
 }
+
 ball_data game_data::get_ball() const
 {
     return ball;

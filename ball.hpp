@@ -33,6 +33,7 @@ public:
     void respawn(int x, int y);
 
     coordinates calc_next_pos() const;
+    void move_next_pos();
 };
 
 #endif

@@ -51,6 +51,9 @@ void ball_data::reflect_y()
 
 void ball_data::respawn(int x, int y)
 {
+    set_x(x);
+    set_y(y);
+
     x_mod = 1;
     y_mod = 1;
 
@@ -64,4 +67,9 @@ coordinates ball_data::calc_next_pos() const
     pos.x += x_mod * speed.x;
     pos.y += y_mod * speed.y;
     return pos;
+}
+
+void ball_data::move_next_pos()
+{
+    set_pos(calc_next_pos());
 }
