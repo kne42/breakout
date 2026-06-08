@@ -86,7 +86,7 @@ void draw_game(const game_data &game)
     }
 
     // blue streak in walls
-    draw_vertical_walls(PADDLE_COLOUR, PADDLE_Y - PADDLE_HEIGHT + BRICK_GAP_Y, 3 * PADDLE_HEIGHT - 2 * BRICK_GAP_Y);
+    draw_vertical_walls(PADDLE_COLOUR, WALL_BOUNDS_END, 3 * PADDLE_HEIGHT - 2 * BRICK_GAP_Y);
 
     // horizontal wall
     fill_rectangle(OTHER_COLOURS, WALL_WIDTH, DIVIDER_START, SCREEN_WIDTH - 2 * WALL_WIDTH, WALL_HEIGHT);

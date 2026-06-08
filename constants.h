@@ -55,4 +55,6 @@ const int WALL_HEIGHT = 18;
 const int DIVIDER_START = 55;
 const int DIVIDER_END = DIVIDER_START + WALL_HEIGHT;
 
+const int WALL_BOUNDS_END = PADDLE_Y - PADDLE_HEIGHT + BRICK_GAP_Y;
+
 #endif

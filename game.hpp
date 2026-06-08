@@ -1,6 +1,8 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include <array>
+
 #include "unit.hpp"
 #include "brick.hpp"
 #include "ball.hpp"
@@ -19,12 +21,15 @@ class game_data
     unsigned short current_serve[2];
     int max_serves;
 
-    bool vslow = true;
+    bool idle;
+    bool vslow;
+    bool serve_wait;
 
     brick_data bricks[2][NUM_BRICK_ROWS][NUM_BRICK_COLS];
     ball_data ball;
     paddle_data paddle;
 
+    void set_idle(bool idle);
     void bricks_map(int player, brick_func func);
 
 public:

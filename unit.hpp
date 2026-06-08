@@ -33,17 +33,18 @@ protected:
     void set_height(const int &height);
 
 public:
-    int get_width() const;
-    int get_height() const;
-    coordinates get_pos() const;
-    double get_x() const;
-    double get_y() const;
-    coordinates calculate_edge(edge edges) const;
+    virtual int get_width() const;
+    virtual int get_height() const;
+    virtual coordinates get_pos() const;
+    virtual double get_x() const;
+    virtual double get_y() const;
+    virtual coordinates calculate_edge(edge edges) const;
 
-    double get_left() const;
-    double get_right() const;
-    double get_top() const;
-    double get_bottom() const;
+    virtual double get_left() const;
+    virtual double get_right() const;
+    virtual double get_top() const;
+    virtual double get_bottom() const;
+    virtual coordinates get_middle() const;
 };
 
 #endif

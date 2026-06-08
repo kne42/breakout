@@ -98,3 +98,11 @@ double unit::get_bottom() const
 {
     return get_y() + get_height();
 }
+
+coordinates unit::get_middle() const
+{
+    coordinates middle;
+    middle.x = get_x() + get_width() / 2;
+    middle.y = get_y() + get_height() / 2;
+    return middle;
+}
