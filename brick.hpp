@@ -14,6 +14,7 @@ public:
     brick_data(int row, int col);
 
     bool is_broken() const;
+    void set_broken(bool broken);
     void reset();
 };
 

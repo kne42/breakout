@@ -25,6 +25,71 @@ void game_data::bricks_map(int player, const_brick_func func) const
     }
 }
 
+int get_brick_row_by_y_from_top(int y)
+{
+    int start = BRICK_AREA_Y_START;
+    int end;
+
+    for (int i = 0; i < NUM_BRICK_ROWS; i++)
+    {
+        end = start + BRICK_HEIGHT;
+        if (y >= start && y <= end)
+            return i;
+        start = end + BRICK_GAP_Y;
+    }
+
+    return -1;
+}
+
+int get_brick_row_by_y_from_bottom(int y)
+{
+    int start = BRICK_AREA_Y_END;
+    int end;
+
+    for (int i = NUM_BRICK_ROWS - 1; i >= 0; i--)
+    {
+        end = start - BRICK_HEIGHT;
+        if (y <= start && y >= end)
+            return i;
+        start = end - BRICK_GAP_Y;
+    }
+
+    return -1;
+}
+
+int get_brick_col_by_x_from_left(int left, int right)
+{
+    int start = 0;
+    int end;
+
+    for (int i = 0; i < NUM_BRICK_COLS; i++)
+    {
+        end = start + BRICK_WIDTH;
+        if ((left >= start && left <= end) || (right >= start && right <= end))
+            return i;
+        start = end + BRICK_GAP_X;
+    }
+
+    return -1;
+}
+
+int get_brick_col_by_x_from_right(int left, int right)
+{
+    // this can be optimized by having a counterpart that searches right-to-left for when the ball is approaching from the right
+    int start = SCREEN_WIDTH;
+    int end;
+
+    for (int i = NUM_BRICK_COLS - 1; i >= 0; i--)
+    {
+        end = start - BRICK_WIDTH;
+        if ((left <= start && left >= end) || (right <= start && right >= end))
+            return i;
+        start = end - BRICK_GAP_X;
+    }
+
+    return -1;
+}
+
 void init_brick(brick_data &brick, int row, int col)
 {
     brick = brick_data(row, col);
@@ -90,6 +155,7 @@ void game_data::update()
     if (ball.get_top() <= DIVIDER_END)
     {
         ball.reflect_y();
+        ball_phasing = false;
     }
 
     // detect paddle collision
@@ -97,22 +163,70 @@ void game_data::update()
     if (section)
     {
         ball.reflect_y();
+        ball_phasing = false;
 
-        if (section == A)
+        if (!idle)
         {
-            write_line("A");
+            if (!vslow)
+                ball.set_x_fast();
+            else if (section & INNER)
+                ball.set_x_slow();
+            else
+                ball.set_x_fast();
+
+            if (section & LEFT)
+                ball.set_moving_left();
+            else
+                ball.set_moving_right();
         }
-        if (section == B)
+    }
+
+    // detect brick collision
+    if (!ball_phasing)
+    {
+        int row = -1;
+        int col = -1;
+        // ball moving upwards so only need to check with top hitbox and vice versa
+        if (ball.is_moving_up())
         {
-            write_line("B");
+            const int y_edge = ball.get_top();
+            if (y_edge <= BRICK_AREA_Y_END && y_edge >= BRICK_AREA_Y_START)
+                row = get_brick_row_by_y_from_bottom(y_edge);
         }
-        if (section == C)
+        else
         {
-            write_line("C");
+            const int y_edge = ball.get_bottom();
+            if (y_edge <= BRICK_AREA_Y_END && y_edge >= BRICK_AREA_Y_START)
+                row = get_brick_row_by_y_from_top(y_edge);
         }
-        if (section == D)
+
+        // in brick area
+        if (row != -1)
         {
-            write_line("D");
+            // ball moving left so only check first from right and vice versa
+            if (ball.is_moving_left())
+            {
+                col = get_brick_col_by_x_from_right(ball.get_left(), ball.get_right());
+            }
+            else
+            {
+                col = get_brick_col_by_x_from_left(ball.get_left(), ball.get_right());
+            }
+
+            // brick hit
+            if (col != -1)
+            {
+                brick_data &brick = bricks[active_player][row][col];
+                if (!brick.is_broken())
+                {
+                    if (!idle)
+                    {
+                        brick.set_broken(true);
+                        ball_phasing = true;
+                    }
+                    ball.reflect_y();
+                }
+            }
         }
     }
 
@@ -125,6 +239,7 @@ void game_data::reset()
     vslow = true;
     ball.respawn(rnd(BALL_SPAWN_BOUNDS_LEFT, BALL_SPAWN_BOUNDS_RIGHT), rnd(BALL_SPAWN_BOUNDS_TOP, BALL_SPAWN_BOUNDS_BOTTOM));
     paddle.reset();
+    ball_phasing = false;
 }
 
 int game_data::get_active_player() const

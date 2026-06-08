@@ -24,6 +24,7 @@ class game_data
     bool idle;
     bool vslow;
     bool serve_wait;
+    bool ball_phasing;
 
     brick_data bricks[2][NUM_BRICK_ROWS][NUM_BRICK_COLS];
     ball_data ball;

@@ -22,7 +22,12 @@ bool brick_data::is_broken() const
     return broken;
 }
 
+void brick_data::set_broken(bool broken)
+{
+    this->broken = broken;
+}
+
 void brick_data::reset()
 {
-    broken = false;
+    set_broken(false);
 }

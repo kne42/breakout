@@ -9,6 +9,26 @@ ball_data::ball_data()
     respawn(0, 0);
 }
 
+int ball_data::get_x_speed() const
+{
+    return speed.x;
+}
+
+int ball_data::get_y_speed() const
+{
+    return speed.y;
+}
+
+int ball_data::get_x_velocity() const
+{
+    return x_mod * get_x_speed();
+}
+
+int ball_data::get_y_velocity() const
+{
+    return y_mod * get_y_speed();
+}
+
 void ball_data::set_x_slow()
 {
     speed.x = SPEED_SLOW;
@@ -49,6 +69,36 @@ void ball_data::reflect_y()
     y_mod *= -1;
 }
 
+bool ball_data::is_moving_up() const
+{
+    return y_mod < 0;
+}
+
+bool ball_data::is_moving_left() const
+{
+    return x_mod < 0;
+}
+
+void ball_data::set_moving_up()
+{
+    y_mod = -1;
+}
+
+void ball_data::set_moving_down()
+{
+    y_mod = 1;
+}
+
+void ball_data::set_moving_left()
+{
+    x_mod = -1;
+}
+
+void ball_data::set_moving_right()
+{
+    x_mod = 1;
+}
+
 void ball_data::respawn(int x, int y)
 {
     set_x(x);
@@ -64,8 +114,8 @@ void ball_data::respawn(int x, int y)
 coordinates ball_data::calc_next_pos() const
 {
     coordinates pos = get_pos();
-    pos.x += x_mod * speed.x;
-    pos.y += y_mod * speed.y;
+    pos.x += get_x_velocity();
+    pos.y += get_y_velocity();
     return pos;
 }
 

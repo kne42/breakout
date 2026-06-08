@@ -19,6 +19,12 @@ class ball_data : public unit
 public:
     ball_data();
 
+    int get_x_speed() const;
+    int get_y_speed() const;
+
+    int get_x_velocity() const;
+    int get_y_velocity() const;
+
     void set_x_slow();
     void set_x_med();
     void set_x_fast();
@@ -29,6 +35,14 @@ public:
 
     void reflect_x();
     void reflect_y();
+
+    bool is_moving_up() const;
+    bool is_moving_left() const;
+
+    void set_moving_up();
+    void set_moving_down();
+    void set_moving_left();
+    void set_moving_right();
 
     void respawn(int x, int y);
 
