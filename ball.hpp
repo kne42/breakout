@@ -3,16 +3,36 @@
 
 #include "unit.hpp"
 
+enum speed
+{
+    SPEED_SLOW = 1,
+    SPEED_MEDIUM = 2,
+    SPEED_FAST = 3,
+};
+
 class ball_data : public unit
 {
-    coordinates velocity_vector;
-    float velocity_multiplier;
-    bool phasing;
+    coordinates speed;
+    short x_mod;
+    short y_mod;
 
 public:
     ball_data();
-    ball_data(int x, int y, int speed, int direction);
-    void set_velocity(int speed, int direction);
+
+    void set_x_slow();
+    void set_x_med();
+    void set_x_fast();
+
+    void set_y_slow();
+    void set_y_med();
+    void set_y_fast();
+
+    void reflect_x();
+    void reflect_y();
+
+    void respawn(int x, int y);
+
+    coordinates calc_next_pos() const;
 };
 
 #endif

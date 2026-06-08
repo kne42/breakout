@@ -19,6 +19,8 @@ class game_data
     unsigned short current_serve[2];
     int max_serves;
 
+    bool vslow = true;
+
     brick_data bricks[2][NUM_BRICK_ROWS][NUM_BRICK_COLS];
     ball_data ball;
     paddle_data paddle;

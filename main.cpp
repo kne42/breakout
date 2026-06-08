@@ -23,8 +23,7 @@ int main()
             draw_rectangle(COLOR_RED, BALL_SPAWN_BOUNDS_LEFT, BALL_SPAWN_BOUNDS_TOP, BALL_SPAWN_BOUNDS_RIGHT - BALL_SPAWN_BOUNDS_LEFT, BALL_SPAWN_BOUNDS_BOTTOM - BALL_SPAWN_BOUNDS_TOP);
         }
 
-        refresh_screen(30);
-        delay(5000);
+        refresh_screen(60);
     }
 
     return 0;

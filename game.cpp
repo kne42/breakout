@@ -45,7 +45,7 @@ void game_data::new_game(bool two_players)
 
     int num_players = two_players ? 2 : 1;
 
-    ball = ball_data(rnd(BALL_SPAWN_BOUNDS_LEFT, BALL_SPAWN_BOUNDS_RIGHT), rnd(BALL_SPAWN_BOUNDS_TOP, BALL_SPAWN_BOUNDS_BOTTOM), DIFFICULTY_NONE, rnd(BALL_STARTING_ANGLE_MIN, BALL_STARTING_ANGLE_MAX));
+    ball.respawn(rnd(BALL_SPAWN_BOUNDS_LEFT, BALL_SPAWN_BOUNDS_RIGHT), rnd(BALL_SPAWN_BOUNDS_TOP, BALL_SPAWN_BOUNDS_BOTTOM));
     paddle.reset();
 
     score[0] = 0;
