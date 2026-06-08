@@ -34,7 +34,7 @@ const int ROWS_PER_GROUP = 2;
 // brick groups in order of: red, orange, green, yellow
 const std::array<int, 4> BRICK_POINTS = {7, 5, 3, 1};
 
-const int PADDLE_SPEED = 10;
+const int PADDLE_SPEED = 5;
 const int PADDLE_HEIGHT = 8;
 const int PADDLE_WIDTH = BRICK_WIDTH;
 const int PADDLE_Y = SCREEN_HEIGHT - 70;

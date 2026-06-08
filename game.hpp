@@ -53,6 +53,8 @@ public:
     void handle_paddle_collision();
     void handle_brick_collision();
 
+    void handle_paddle_input();
+
     void update();
 };
 

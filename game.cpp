@@ -235,11 +235,28 @@ void game_data::handle_brick_collision()
     }
 }
 
+void game_data::handle_paddle_input()
+{
+    if (key_down(LEFT_KEY))
+    {
+        paddle.move_left();
+    }
+    if (key_down(RIGHT_KEY))
+    {
+        paddle.move_right();
+    }
+}
+
 void game_data::update()
 {
     handle_wall_collision();
     handle_paddle_collision();
     handle_brick_collision();
+
+    process_events();
+
+    if (!idle)
+        handle_paddle_input();
 
     // handle ball move
     ball.move_next_pos();

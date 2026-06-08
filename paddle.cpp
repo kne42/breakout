@@ -43,6 +43,23 @@ int paddle_data::get_width() const
     return unit::get_width();
 }
 
+void paddle_data::move_left()
+{
+    int new_x = get_x() - speed;
+    if (new_x <= 0)
+        new_x = 0;
+    set_x(new_x);
+}
+
+void paddle_data::move_right()
+{
+    int new_x = get_x() + speed;
+    const int max_x = SCREEN_WIDTH - get_width();
+    if (new_x >= max_x)
+        new_x = max_x;
+    set_x(new_x);
+}
+
 paddle_section paddle_data::section_hit(const unit &u)
 {
     int section = SECTION_NONE;
