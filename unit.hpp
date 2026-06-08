@@ -1,8 +1,6 @@
 #ifndef UNIT_HPP
 #define UNIT_HPP
 
-#include "splashkit.h"
-
 enum edge
 {
     EDGE_LEFT = 0b1000,
@@ -41,7 +39,6 @@ public:
     double get_x() const;
     double get_y() const;
     coordinates calculate_edge(edge edges) const;
-    void draw(color colour) const;
 };
 
 #endif

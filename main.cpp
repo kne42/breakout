@@ -2,8 +2,9 @@
 
 #include "constants.h"
 #include "game.hpp"
+#include "view.hpp"
 
-const bool DEBUG = false;
+const bool DEBUG_MODE = false;
 
 int main()
 {
@@ -14,9 +15,9 @@ int main()
     while (!quit_requested())
     {
         game.update();
-        game.draw();
+        draw_game(game);
 
-        if (DEBUG)
+        if (DEBUG_MODE)
         {
             // show ball spawn area
             draw_rectangle(COLOR_RED, BALL_SPAWN_BOUNDS_LEFT, BALL_SPAWN_BOUNDS_TOP, BALL_SPAWN_BOUNDS_RIGHT - BALL_SPAWN_BOUNDS_LEFT, BALL_SPAWN_BOUNDS_BOTTOM - BALL_SPAWN_BOUNDS_TOP);

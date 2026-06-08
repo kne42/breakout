@@ -14,7 +14,6 @@ public:
     brick_data(int row, int col);
 
     bool is_broken() const;
-    void draw(color colour) const;
     void reset();
 };
 

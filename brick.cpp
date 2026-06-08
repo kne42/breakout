@@ -1,5 +1,3 @@
-#include "splashkit.h"
-
 #include "brick.hpp"
 #include "constants.h"
 
@@ -27,14 +25,4 @@ bool brick_data::is_broken() const
 void brick_data::reset()
 {
     broken = false;
-}
-
-// GUI
-
-void brick_data::draw(color colour) const
-{
-    if (!broken)
-    {
-        unit::draw(colour);
-    }
 }

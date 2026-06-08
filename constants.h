@@ -1,7 +1,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#include "splashkit.h"
+#include <array>
 
 enum speed_thresholds
 {
@@ -33,7 +33,6 @@ const int ROWS_PER_GROUP = 2;
 
 // brick groups in order of: red, orange, green, yellow
 const std::array<int, 4> BRICK_POINTS = {7, 5, 3, 1};
-const std::array<color, 4> BRICK_COLOURS = {rgb_color(160, 0, 0), rgb_color(200, 130, 0), rgb_color(0, 130, 42), rgb_color(200, 200, 30)};
 
 const int PADDLE_SPEED = 10;
 const int PADDLE_HEIGHT = 8;
@@ -41,7 +40,8 @@ const int PADDLE_WIDTH = BRICK_WIDTH;
 const int PADDLE_Y = SCREEN_HEIGHT - 70;
 const int PADDLE_STARTING_X = SCREEN_WIDTH / 2 - PADDLE_WIDTH / 2;
 
-const int BALL_SIZE = 5;
+const int BALL_WIDTH = 8;
+const int BALL_HEIGHT = 5;
 const int BALL_SPAWN_OFFSET = 50;
 
 const int BALL_SPAWN_BOUNDS_LEFT = BALL_SPAWN_OFFSET;
@@ -52,12 +52,10 @@ const int BALL_SPAWN_BOUNDS_BOTTOM = PADDLE_Y - BALL_SPAWN_OFFSET;
 const int BALL_STARTING_ANGLE_MIN = 210;
 const int BALL_STARTING_ANGLE_MAX = 330;
 
-const color PADDLE_COLOUR = rgb_color(0, 130, 200);
-const color BACKGROUND_COLOUR = COLOR_BLACK;
-const color OTHER_COLOURS = rgba_color(255, 255, 255, 210);
+const int WALL_WIDTH = 5;
+const int WALL_HEIGHT = 18;
 
-const int WALL_THICKNESS = 5;
-
-const int STARTING_LIVES = 3;
+const int DIVIDER_START = 55;
+const int DIVIDER_END = DIVIDER_START + WALL_HEIGHT;
 
 #endif
