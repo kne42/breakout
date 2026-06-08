@@ -141,9 +141,8 @@ void game_data::new_game(bool two_players)
     }
 }
 
-void game_data::update()
+void game_data::handle_wall_collision()
 {
-    // detect wall collisions
     // left and right walls
     if (ball.get_left() <= 0 || ball.get_right() >= SCREEN_WIDTH)
     {
@@ -152,13 +151,16 @@ void game_data::update()
             ball.reflect_x();
     }
 
+    // top wall
     if (ball.get_top() <= DIVIDER_END)
     {
         ball.reflect_y();
         ball_phasing = false;
     }
+}
 
-    // detect paddle collision
+void game_data::handle_paddle_collision()
+{
     paddle_section section = paddle.section_hit(ball);
     if (section)
     {
@@ -180,8 +182,10 @@ void game_data::update()
                 ball.set_moving_right();
         }
     }
+}
 
-    // detect brick collision
+void game_data::handle_brick_collision()
+{
     if (!ball_phasing)
     {
         int row = -1;
@@ -229,6 +233,13 @@ void game_data::update()
             }
         }
     }
+}
+
+void game_data::update()
+{
+    handle_wall_collision();
+    handle_paddle_collision();
+    handle_brick_collision();
 
     // handle ball move
     ball.move_next_pos();

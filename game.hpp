@@ -37,7 +37,6 @@ public:
     game_data();
     game_data(int max_serves);
     void new_game(bool two_players);
-    void update();
     void reset();
     int swap_players();
     void new_round();
@@ -49,6 +48,12 @@ public:
     int get_score(int player) const;
 
     void bricks_map(int player, const_brick_func func) const;
+
+    void handle_wall_collision();
+    void handle_paddle_collision();
+    void handle_brick_collision();
+
+    void update();
 };
 
 #endif
