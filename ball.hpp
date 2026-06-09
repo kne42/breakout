@@ -25,6 +25,11 @@ public:
     int get_x_velocity() const;
     int get_y_velocity() const;
 
+    bool is_moving_up() const;
+    bool is_moving_down() const;
+    bool is_moving_left() const;
+    bool is_moving_right() const;
+
     void set_x_slow();
     void set_x_med();
     void set_x_fast();
@@ -33,18 +38,13 @@ public:
     void set_y_med();
     void set_y_fast();
 
-    void reflect_x();
-    void reflect_y();
-
-    bool is_moving_up() const;
-    bool is_moving_down() const;
-    bool is_moving_left() const;
-    bool is_moving_right() const;
-
     void set_moving_up();
     void set_moving_down();
     void set_moving_left();
     void set_moving_right();
+
+    void reflect_x();
+    void reflect_y();
 
     void respawn(int x, int y);
 

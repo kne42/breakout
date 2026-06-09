@@ -24,12 +24,16 @@ class paddle_data : public unit
 
 public:
     paddle_data();
+
     double get_x() const override;
     int get_width() const override;
+
     void set_shrunken(bool shrunken);
     void set_idle(bool idle);
+
     void move_left();
     void move_right();
+    void move_center();
 
     paddle_section section_hit(const unit &u);
 };

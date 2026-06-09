@@ -25,7 +25,7 @@ protected:
     int volley_counter;
 
     bool idle;
-    bool vslow = true;
+    bool x_slow = true;
     bool waiting_for_serve = false;
     bool ball_phasing = false;
 
@@ -47,7 +47,7 @@ protected:
     void start_round();
     void end_round();
     void end_game();
-    void reset_ball_state();
+    void reset_difficulty();
 
 public:
     game_data();

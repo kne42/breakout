@@ -75,7 +75,7 @@ void game_controller::handle_paddle_collision()
         {
             play_paddle_hit();
 
-            if (!vslow)
+            if (!x_slow)
                 ball.set_x_fast();
             else if (section & INNER)
                 ball.set_x_slow();
@@ -164,6 +164,7 @@ void game_controller::handle_mode_start()
     {
         new_game();
         set_idle(false);
+        paddle.move_center();
     }
     if (key_down(LEFT_KEY))
         two_players = false;

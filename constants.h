@@ -37,7 +37,6 @@ const int PADDLE_SPEED = 6;
 const int PADDLE_HEIGHT = 8;
 const int PADDLE_WIDTH = BRICK_WIDTH;
 const int PADDLE_Y = SCREEN_HEIGHT - 70;
-const int PADDLE_STARTING_X = SCREEN_WIDTH / 2 - PADDLE_WIDTH / 2;
 
 const int BALL_WIDTH = 8;
 const int BALL_HEIGHT = 5;

@@ -12,8 +12,8 @@ paddle_data::paddle_data()
     set_y(PADDLE_Y);
     speed = PADDLE_SPEED;
     set_idle(false);
-    set_x(PADDLE_STARTING_X);
     set_shrunken(false);
+    move_center();
 }
 
 /**
@@ -69,6 +69,11 @@ void paddle_data::move_right()
     if (new_x >= max_x)
         new_x = max_x;
     set_x(new_x);
+}
+
+void paddle_data::move_center()
+{
+    set_x(SCREEN_WIDTH / 2 - get_width() / 2);
 }
 
 paddle_section paddle_data::section_hit(const unit &u)

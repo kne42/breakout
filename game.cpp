@@ -55,11 +55,9 @@ void game_data::spawn_ball()
     ball.respawn(rnd(BALL_SPAWN_BOUNDS_LEFT, BALL_SPAWN_BOUNDS_RIGHT), rnd(BALL_SPAWN_BOUNDS_TOP, BALL_SPAWN_BOUNDS_BOTTOM));
 }
 
-void game_data::reset_ball_state()
+void game_data::reset_difficulty()
 {
-    waiting_for_serve = true;
-    vslow = true;
-    ball_phasing = false;
+    x_slow = true;
     volley_counter = 0;
     max_speed = false;
     paddle.set_shrunken(false);
@@ -164,7 +162,7 @@ void game_data::set_ball_y_speed()
 {
     if (max_speed)
     {
-        vslow = false;
+        x_slow = false;
         ball.set_y_fast();
     }
     else
@@ -187,7 +185,7 @@ void game_data::set_ball_y_speed()
         }
 
         if (volley_counter >= 8)
-            vslow = false;
+            x_slow = false;
     }
 }
 
@@ -197,7 +195,7 @@ void game_data::set_ball_y_speed()
 
 void game_data::new_game()
 {
-    reset_ball_state();
+    reset_difficulty();
 
     active_player = 0;
 
@@ -206,6 +204,7 @@ void game_data::new_game()
     current_serve = 1;
 
     waiting_for_serve = true;
+    ball_phasing = false;
 
     for (int player = 0; player < num_players(); player++)
     {
@@ -229,7 +228,10 @@ void game_data::start_round()
 
 void game_data::end_round()
 {
-    reset_ball_state();
+    reset_difficulty();
+
+    waiting_for_serve = true;
+    ball_phasing = false;
 
     if (!two_players || active_player == 1)
         current_serve++;
