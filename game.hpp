@@ -33,34 +33,36 @@ protected:
     ball_data ball;
     paddle_data paddle;
 
-    void set_idle(bool idle);
     void bricks_map(int player, brick_func func);
+    void reset_bricks(int player);
     void spawn_ball();
+
+    void set_idle(bool idle);
     void set_current_score(int score);
     void score_points(int points);
     void increment_volley_counter();
     void set_ball_y_speed();
-    void reset_bricks(int player);
 
     void new_game();
-    void swap_players();
+    void end_game();
     void start_round();
     void end_round();
-    void end_game();
+
+    void swap_players();
     void reset_difficulty();
 
 public:
     game_data();
     game_data(int max_serves);
 
-    int get_active_player() const;
     paddle_data get_paddle() const;
     ball_data get_ball() const;
+    bool is_idle() const;
+    bool is_waiting_for_serve() const;
+    int get_active_player() const;
     int get_serve() const;
     int get_score(int player) const;
     int get_current_score() const;
-    bool is_idle() const;
-    bool is_waiting_for_serve() const;
     int num_players() const;
 
     void bricks_map(int player, const_brick_func func) const;

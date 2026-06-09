@@ -21,11 +21,11 @@ protected:
     void set_height(const int &height);
 
 public:
-    virtual int get_width() const;
-    virtual int get_height() const;
     virtual coordinates get_pos() const;
     virtual int get_x() const;
     virtual int get_y() const;
+    virtual int get_width() const;
+    virtual int get_height() const;
 
     virtual int get_left() const;
     virtual int get_right() const;

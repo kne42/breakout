@@ -5,7 +5,6 @@
 
 class game_controller : public game_data
 {
-
     void handle_wall_collision();
     void handle_paddle_collision();
     void handle_brick_collision();
