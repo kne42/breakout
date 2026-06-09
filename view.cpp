@@ -4,6 +4,7 @@
 #include "game.hpp"
 #include "unit.hpp"
 #include "draw-digit.hpp"
+#include "debug.h"
 
 void draw_player(const game_data &game, bool blink)
 {
@@ -116,5 +117,11 @@ void draw_game(const game_data &game, bool blink)
             draw_ball(game, PADDLE_COLOUR);
         else
             draw_ball(game, OTHER_COLOURS);
+    }
+
+    if (DEBUG_SHOW_SPAWN_AREA)
+    {
+        // show ball spawn area
+        draw_rectangle(COLOR_RED, BALL_SPAWN_BOUNDS_LEFT, BALL_SPAWN_BOUNDS_TOP, BALL_SPAWN_BOUNDS_RIGHT - BALL_SPAWN_BOUNDS_LEFT, BALL_SPAWN_BOUNDS_BOTTOM - BALL_SPAWN_BOUNDS_TOP);
     }
 }

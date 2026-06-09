@@ -1,6 +1,7 @@
 #include "splashkit.h"
 
 #include "constants.h"
+#include "debug.h"
 #include "game.hpp"
 
 void game_data::bricks_map(int player, brick_func func)
@@ -174,7 +175,7 @@ void game_data::handle_wall_collision()
     if (left || right)
     {
         // do not reflect if in out of bounds area
-        if (ball.get_top() < WALL_BOUNDS_END)
+        if (DEBUG_NO_OUT_OF_BOUNDS || ball.get_top() < WALL_BOUNDS_END)
             ball.reflect_x();
     }
 
@@ -185,6 +186,13 @@ void game_data::handle_wall_collision()
         ball_phasing = false;
         if (!idle)
             paddle.set_shrunken(true);
+    }
+
+    // bottom wall
+    if (DEBUG_NO_OUT_OF_BOUNDS && ball.get_bottom() >= SCREEN_HEIGHT)
+    {
+        ball.reflect_y();
+        ball_phasing = false;
     }
 }
 
@@ -345,7 +353,7 @@ void game_data::end_round()
     if (!two_players || active_player == 1)
         current_serve++;
 
-    if (get_serve() > max_serves)
+    if (!DEBUG_INFINITE_LIVES && get_serve() > max_serves)
     {
         end_game();
     }

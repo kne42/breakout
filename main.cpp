@@ -4,8 +4,6 @@
 #include "game.hpp"
 #include "view.hpp"
 
-const bool DEBUG_MODE = false;
-
 int main()
 {
     game_data game;
@@ -17,12 +15,6 @@ int main()
     {
         game.update();
         draw_game(game, clock++ % 12 <= 4);
-
-        if (DEBUG_MODE)
-        {
-            // show ball spawn area
-            draw_rectangle(COLOR_RED, BALL_SPAWN_BOUNDS_LEFT, BALL_SPAWN_BOUNDS_TOP, BALL_SPAWN_BOUNDS_RIGHT - BALL_SPAWN_BOUNDS_LEFT, BALL_SPAWN_BOUNDS_BOTTOM - BALL_SPAWN_BOUNDS_TOP);
-        }
 
         refresh_screen(60);
     }
