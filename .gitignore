@@ -2,6 +2,6 @@
 !*.cpp
 !*.hpp
 !*.h
-!*/
 !.gitignore
-!*.wav
+!CMakeLists.txt
+!sounds/*.wav
