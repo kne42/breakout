@@ -4,6 +4,10 @@
 #include "debug.h"
 #include "game.hpp"
 
+/**
+ * Helpers
+ */
+
 void game_data::bricks_map(int player, brick_func func)
 {
     for (int row = 0; row < NUM_BRICK_ROWS; row++)
@@ -26,10 +30,6 @@ void game_data::bricks_map(int player, const_brick_func func) const
     }
 }
 
-/**
- * Brick map helpers.
- */
-
 void init_brick(brick_data &brick, int row, int col)
 {
     brick = brick_data(row, col);
@@ -45,6 +45,30 @@ void game_data::reset_bricks(int player)
     bricks_map(player, reset_brick);
 }
 
+void game_data::swap_players()
+{
+    active_player = active_player == 0 ? 1 : 0;
+}
+
+void game_data::spawn_ball()
+{
+    ball.respawn(rnd(BALL_SPAWN_BOUNDS_LEFT, BALL_SPAWN_BOUNDS_RIGHT), rnd(BALL_SPAWN_BOUNDS_TOP, BALL_SPAWN_BOUNDS_BOTTOM));
+}
+
+void game_data::reset_ball_state()
+{
+    waiting_for_serve = true;
+    vslow = true;
+    ball_phasing = false;
+    volley_counter = 0;
+    max_speed = false;
+    paddle.set_shrunken(false);
+}
+
+/**
+ * Constructors
+ */
+
 game_data::game_data() : game_data(3) {}
 
 game_data::game_data(int max_serves)
@@ -57,90 +81,23 @@ game_data::game_data(int max_serves)
     set_idle(true);
 }
 
-void game_data::set_current_score(int score)
-{
-    this->score[active_player] = score;
-}
-
-int game_data::get_current_score() const
-{
-    return score[active_player];
-}
-
-void game_data::set_idle(bool idle)
-{
-    this->idle = idle;
-    paddle.set_idle(idle);
-}
+/**
+ * Getters
+ */
 
 bool game_data::is_idle() const
 {
     return idle;
 }
 
-void game_data::spawn_ball()
+bool game_data::is_waiting_for_serve() const
 {
-    ball.respawn(rnd(BALL_SPAWN_BOUNDS_LEFT, BALL_SPAWN_BOUNDS_RIGHT), rnd(BALL_SPAWN_BOUNDS_TOP, BALL_SPAWN_BOUNDS_BOTTOM));
+    return waiting_for_serve;
 }
 
-void game_data::new_game()
+int game_data::get_current_score() const
 {
-    reset_ball_state();
-
-    active_player = 0;
-
-    score[0] = 0;
-    score[1] = 0;
-    current_serve = 1;
-
-    waiting_for_serve = true;
-
-    for (int player = 0; player < num_players(); player++)
-    {
-        reset_bricks(player);
-    }
-}
-
-void game_data::end_round()
-{
-    reset_ball_state();
-
-    if (!two_players || active_player == 1)
-        current_serve++;
-
-    if (!DEBUG_INFINITE_LIVES && get_serve() > max_serves)
-    {
-        end_game();
-    }
-
-    if (two_players)
-    {
-        swap_players();
-    }
-}
-
-void game_data::start_round()
-{
-    spawn_ball();
-    waiting_for_serve = false;
-    set_idle(false);
-}
-
-void game_data::end_game()
-{
-    waiting_for_serve = false;
-    spawn_ball();
-    set_idle(true);
-}
-
-void game_data::reset_ball_state()
-{
-    waiting_for_serve = true;
-    vslow = true;
-    ball_phasing = false;
-    volley_counter = 0;
-    max_speed = false;
-    paddle.set_shrunken(false);
+    return score[active_player];
 }
 
 int game_data::get_active_player() const
@@ -166,6 +123,26 @@ paddle_data game_data::get_paddle() const
 ball_data game_data::get_ball() const
 {
     return ball;
+}
+
+int game_data::num_players() const
+{
+    return two_players ? 2 : 1;
+}
+
+/**
+ * Setters
+ */
+
+void game_data::set_current_score(int score)
+{
+    this->score[active_player] = score;
+}
+
+void game_data::set_idle(bool idle)
+{
+    this->idle = idle;
+    paddle.set_idle(idle);
 }
 
 void game_data::score_points(int points)
@@ -214,17 +191,56 @@ void game_data::set_ball_y_speed()
     }
 }
 
-bool game_data::is_waiting_for_serve() const
+/**
+ * Game state
+ */
+
+void game_data::new_game()
 {
-    return waiting_for_serve;
+    reset_ball_state();
+
+    active_player = 0;
+
+    score[0] = 0;
+    score[1] = 0;
+    current_serve = 1;
+
+    waiting_for_serve = true;
+
+    for (int player = 0; player < num_players(); player++)
+    {
+        reset_bricks(player);
+    }
 }
 
-int game_data::num_players() const
+void game_data::end_game()
 {
-    return two_players ? 2 : 1;
+    waiting_for_serve = false;
+    spawn_ball();
+    set_idle(true);
 }
 
-void game_data::swap_players()
+void game_data::start_round()
 {
-    active_player = active_player == 0 ? 1 : 0;
+    spawn_ball();
+    waiting_for_serve = false;
+    set_idle(false);
+}
+
+void game_data::end_round()
+{
+    reset_ball_state();
+
+    if (!two_players || active_player == 1)
+        current_serve++;
+
+    if (!DEBUG_INFINITE_LIVES && get_serve() > max_serves)
+    {
+        end_game();
+    }
+
+    if (two_players)
+    {
+        swap_players();
+    }
 }

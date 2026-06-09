@@ -5,6 +5,10 @@
 #include "debug.h"
 #include "game-controller.hpp"
 
+/**
+ * Helpers
+ */
+
 int get_brick_row_by_y_from_top(int y)
 {
     int start = BRICK_AREA_Y_START;
@@ -69,6 +73,10 @@ int get_brick_col_by_x_from_right(int left, int right)
 
     return -1;
 }
+
+/**
+ * Collision
+ */
 
 void game_controller::handle_wall_collision()
 {
@@ -207,6 +215,10 @@ void game_controller::handle_ball_out_of_bounds()
         end_round();
 }
 
+/**
+ * Player input
+ */
+
 void game_controller::handle_paddle_input()
 {
     if (key_down(LEFT_KEY))
@@ -224,6 +236,23 @@ void game_controller::handle_serve_start()
     if (key_released(SPACE_KEY))
         start_round();
 }
+
+void game_controller::handle_mode_start()
+{
+    if (key_released(SPACE_KEY))
+    {
+        new_game();
+        set_idle(false);
+    }
+    if (key_down(LEFT_KEY))
+        two_players = false;
+    else if (key_down(RIGHT_KEY))
+        two_players = true;
+}
+
+/**
+ * Game loop
+ */
 
 void game_controller::update()
 {
@@ -251,17 +280,4 @@ void game_controller::update()
         handle_paddle_input();
     else
         handle_mode_start();
-}
-
-void game_controller::handle_mode_start()
-{
-    if (key_released(SPACE_KEY))
-    {
-        new_game();
-        set_idle(false);
-    }
-    if (key_down(LEFT_KEY))
-        two_players = false;
-    else if (key_down(RIGHT_KEY))
-        two_players = true;
 }

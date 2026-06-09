@@ -1,6 +1,10 @@
 #include "constants.h"
 #include "paddle.hpp"
 
+/**
+ * Constructor
+ */
+
 paddle_data::paddle_data()
 {
     set_width(PADDLE_WIDTH);
@@ -8,24 +12,13 @@ paddle_data::paddle_data()
     set_y(PADDLE_Y);
     speed = PADDLE_SPEED;
     set_idle(false);
-    reset();
-}
-
-void paddle_data::set_shrunken(bool shrunken)
-{
-    this->shrunken = shrunken;
-}
-
-void paddle_data::set_idle(bool idle)
-{
-    this->idle = idle;
-}
-
-void paddle_data::reset()
-{
     set_x(PADDLE_STARTING_X);
     set_shrunken(false);
 }
+
+/**
+ * Getters
+ */
 
 double paddle_data::get_x() const
 {
@@ -42,6 +35,24 @@ int paddle_data::get_width() const
         return unit::get_width() / 2;
     return unit::get_width();
 }
+
+/**
+ * Setters
+ */
+
+void paddle_data::set_shrunken(bool shrunken)
+{
+    this->shrunken = shrunken;
+}
+
+void paddle_data::set_idle(bool idle)
+{
+    this->idle = idle;
+}
+
+/**
+ * Helpers
+ */
 
 void paddle_data::move_left()
 {

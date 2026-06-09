@@ -1,6 +1,10 @@
 #include "brick.hpp"
 #include "constants.h"
 
+/**
+ * Constructors
+ */
+
 brick_data::brick_data()
 {
     broken = true;
@@ -17,15 +21,27 @@ brick_data::brick_data(int row, int col)
     reset();
 }
 
+/**
+ * Getters
+ */
+
 bool brick_data::is_broken() const
 {
     return broken;
 }
 
+/**
+ * Setters
+ */
+
 void brick_data::set_broken(bool broken)
 {
     this->broken = broken;
 }
+
+/**
+ * Helpers
+ */
 
 void brick_data::reset()
 {

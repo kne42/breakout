@@ -2,6 +2,10 @@
 
 #include "draw-digit.hpp"
 
+/**
+ * Helpers
+ */
+
 void draw_top_line(color colour, int x, int y, bool overlap_start = true, bool overlap_end = true)
 {
     if (!overlap_start)
@@ -127,6 +131,10 @@ void draw_bottom_right_connector(color colour, int x, int y, bool overlap = true
     fill_rectangle(colour, x, y, LINE_WIDTH, height);
 }
 
+/**
+ * Individual digits
+ */
+
 void draw_zero(color colour, int x, int y)
 {
     draw_top_line(colour, x, y);
@@ -204,6 +212,10 @@ void draw_nine(color colour, int x, int y)
     draw_right_line(colour, x, y, false, true);
     draw_top_left_connector(colour, x, y, false);
 }
+
+/**
+ * General renderer
+ */
 
 void draw_digit(digit d, color colour, int x, int y)
 {

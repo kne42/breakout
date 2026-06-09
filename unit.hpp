@@ -1,18 +1,6 @@
 #ifndef UNIT_HPP
 #define UNIT_HPP
 
-enum edge
-{
-    EDGE_LEFT = 0b1000,
-    EDGE_RIGHT = 0b0100,
-    EDGE_TOP = 0b0010,
-    EDGE_BOTTOM = 0b0001,
-    EDGE_TOP_LEFT = EDGE_TOP | EDGE_LEFT,
-    EDGE_TOP_RIGHT = EDGE_TOP | EDGE_RIGHT,
-    EDGE_BOTTOM_LEFT = EDGE_BOTTOM | EDGE_LEFT,
-    EDGE_BOTTOM_RIGHT = EDGE_BOTTOM | EDGE_RIGHT,
-};
-
 struct coordinates
 {
     double x;
@@ -38,7 +26,6 @@ public:
     virtual coordinates get_pos() const;
     virtual double get_x() const;
     virtual double get_y() const;
-    virtual coordinates calculate_edge(edge edges) const;
 
     virtual double get_left() const;
     virtual double get_right() const;

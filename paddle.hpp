@@ -30,7 +30,6 @@ public:
     void set_idle(bool idle);
     void move_left();
     void move_right();
-    void reset();
 
     paddle_section section_hit(const unit &u);
 };

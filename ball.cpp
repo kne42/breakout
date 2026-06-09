@@ -1,6 +1,10 @@
 #include "ball.hpp"
 #include "constants.h"
 
+/**
+ * Constructor
+ */
+
 ball_data::ball_data()
 {
     set_width(BALL_WIDTH);
@@ -8,6 +12,10 @@ ball_data::ball_data()
 
     respawn(0, 0);
 }
+
+/**
+ * Getters
+ */
 
 int ball_data::get_x_speed() const
 {
@@ -28,6 +36,29 @@ int ball_data::get_y_velocity() const
 {
     return y_mod * get_y_speed();
 }
+
+bool ball_data::is_moving_up() const
+{
+    return y_mod < 0;
+}
+
+bool ball_data::is_moving_down() const
+{
+    return y_mod > 0;
+}
+
+bool ball_data::is_moving_left() const
+{
+    return x_mod < 0;
+}
+bool ball_data::is_moving_right() const
+{
+    return x_mod > 0;
+}
+
+/**
+ * Setters
+ */
 
 void ball_data::set_x_slow()
 {
@@ -59,35 +90,6 @@ void ball_data::set_y_fast()
     speed.y = SPEED_FAST;
 }
 
-void ball_data::reflect_x()
-{
-    x_mod *= -1;
-}
-
-void ball_data::reflect_y()
-{
-    y_mod *= -1;
-}
-
-bool ball_data::is_moving_up() const
-{
-    return y_mod < 0;
-}
-
-bool ball_data::is_moving_down() const
-{
-    return y_mod > 0;
-}
-
-bool ball_data::is_moving_left() const
-{
-    return x_mod < 0;
-}
-bool ball_data::is_moving_right() const
-{
-    return x_mod > 0;
-}
-
 void ball_data::set_moving_up()
 {
     y_mod = -1;
@@ -106,6 +108,20 @@ void ball_data::set_moving_left()
 void ball_data::set_moving_right()
 {
     x_mod = 1;
+}
+
+/**
+ * Helpers
+ */
+
+void ball_data::reflect_x()
+{
+    x_mod *= -1;
+}
+
+void ball_data::reflect_y()
+{
+    y_mod *= -1;
 }
 
 void ball_data::respawn(int x, int y)
