@@ -8,7 +8,7 @@
 
 void draw_player(const game_data &game, bool blink)
 {
-    if (game.get_idle() && blink)
+    if (game.is_idle() && blink)
         return;
 
     int player = game.num_players();
@@ -36,7 +36,7 @@ void draw_score(int score, int x, int y)
 
 void draw_scores(const game_data &game, bool blink)
 {
-    const bool blinking = !game.get_idle() && blink;
+    const bool blinking = !game.is_idle() && blink;
     if (!(blinking && game.get_active_player() == 0))
         draw_score(game.get_score(0), SCORE_MARGIN_1, SCORE_LINE);
     if (!(blinking && game.get_active_player() == 1))

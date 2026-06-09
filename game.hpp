@@ -55,7 +55,7 @@ public:
     int get_serve() const;
     int get_score(int player) const;
     int get_current_score() const;
-    bool get_idle() const;
+    bool is_idle() const;
     bool is_waiting_for_serve() const;
     int num_players() const;
 

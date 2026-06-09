@@ -137,7 +137,7 @@ void game_data::set_idle(bool idle)
     paddle.set_idle(idle);
 }
 
-bool game_data::get_idle() const
+bool game_data::is_idle() const
 {
     return idle;
 }
@@ -185,7 +185,10 @@ void game_data::handle_wall_collision()
         ball.reflect_y();
         ball_phasing = false;
         if (!idle)
+        {
             paddle.set_shrunken(true);
+            vslow = false;
+        }
     }
 
     // bottom wall
@@ -261,7 +264,7 @@ void game_data::handle_brick_collision()
                 brick_data &brick = bricks[active_player][row][col];
                 if (!brick.is_broken())
                 {
-                    if (!idle)
+                    if (!idle && !waiting_for_serve)
                     {
                         brick.set_broken(true);
                         score_points(BRICK_POINTS[row / 2]);
@@ -271,7 +274,10 @@ void game_data::handle_brick_collision()
                             increment_volley_counter();
 
                         if (get_current_score() == MAX_POINTS_PER_SCREEN)
+                        {
                             bricks_map(active_player, reset_brick);
+                            waiting_for_serve = true;
+                        }
                     }
                     ball.reflect_y();
                     ball_phasing = true;
