@@ -139,7 +139,7 @@ void game_data::reset_ball_state()
     vslow = true;
     ball_phasing = false;
     volley_counter = 0;
-    high_value_brick_hit = false;
+    max_speed = false;
     paddle.set_shrunken(false);
 }
 
@@ -168,16 +168,13 @@ ball_data game_data::get_ball() const
     return ball;
 }
 
-int game_data::score_points(int points)
+void game_data::score_points(int points)
 {
-    int &current_score = score[active_player];
-
     // orange or red brick hit
-    if (points >= BRICK_POINTS[1])
-        high_value_brick_hit = true;
+    if (points >= POINTS_ORANGE)
+        max_speed = true;
 
-    current_score += points;
-    return current_score;
+    score[active_player] += points;
 }
 
 void game_data::increment_volley_counter()
@@ -188,7 +185,7 @@ void game_data::increment_volley_counter()
 
 void game_data::set_ball_y_speed()
 {
-    if (high_value_brick_hit)
+    if (max_speed)
     {
         vslow = false;
         ball.set_y_fast();

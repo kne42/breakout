@@ -21,7 +21,7 @@ protected:
     unsigned short current_serve = 1;
     int max_serves;
 
-    bool high_value_brick_hit;
+    bool max_speed;
     int volley_counter;
 
     bool idle;
@@ -37,7 +37,7 @@ protected:
     void bricks_map(int player, brick_func func);
     void spawn_ball();
     void set_current_score(int score);
-    int score_points(int points);
+    void score_points(int points);
     void increment_volley_counter();
     void set_ball_y_speed();
     void reset_bricks(int player);

@@ -1,5 +1,6 @@
 #include "splashkit.h"
 
+#include "audio.h"
 #include "constants.h"
 #include "debug.h"
 #include "game-controller.hpp"
@@ -80,7 +81,11 @@ void game_controller::handle_wall_collision()
     {
         // do not reflect if in out of bounds area
         if (DEBUG_NO_OUT_OF_BOUNDS || ball.get_top() < WALL_BOUNDS_END)
+        {
             ball.reflect_x();
+            if (!idle)
+                play_wall_hit();
+        }
     }
 
     // top wall
@@ -90,8 +95,9 @@ void game_controller::handle_wall_collision()
         ball_phasing = false;
         if (!idle)
         {
+            play_wall_hit();
             paddle.set_shrunken(true);
-            vslow = false;
+            max_speed = true;
         }
     }
 
@@ -114,6 +120,8 @@ void game_controller::handle_paddle_collision()
 
         if (!idle)
         {
+            play_paddle_hit();
+
             if (!vslow)
                 ball.set_x_fast();
             else if (section & INNER)
@@ -171,7 +179,9 @@ void game_controller::handle_brick_collision()
                     if (!idle && !waiting_for_serve)
                     {
                         brick.set_broken(true);
-                        score_points(BRICK_POINTS[row / 2]);
+                        brick_points points = BRICK_POINTS[row / 2];
+                        score_points(points);
+                        play_brick_hit(points);
 
                         // hit brick from top
                         if (ball.is_moving_down())

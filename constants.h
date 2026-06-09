@@ -3,13 +3,12 @@
 
 #include <array>
 
-enum speed_thresholds
+enum brick_points
 {
-    DIFFICULTY_NONE = 3,
-    DIFFICULTY_FOUR_HITS = 6,
-    DIFFICULTY_TWELVE_HITS = 12,
-    DIFFICULTY_ORANGE_ROW = 16,
-    DIFFICULTY_RED_ROW = 32,
+    POINTS_RED = 7,
+    POINTS_ORANGE = 5,
+    POINTS_GREEN = 3,
+    POINTS_YELLOW = 1,
 };
 
 const int NUM_BRICK_COLS = 14;
@@ -31,8 +30,7 @@ const int SCREEN_HEIGHT = SCREEN_WIDTH * 1.45;
 const int NUM_BRICK_GROUPS = 4;
 const int ROWS_PER_GROUP = NUM_BRICK_ROWS / NUM_BRICK_GROUPS;
 
-// brick groups in order of: red, orange, green, yellow
-const std::array<int, 4> BRICK_POINTS = {7, 5, 3, 1};
+const std::array<brick_points, 4> BRICK_POINTS = {POINTS_RED, POINTS_ORANGE, POINTS_GREEN, POINTS_YELLOW};
 const int MAX_POINTS_PER_SCREEN = ROWS_PER_GROUP * NUM_BRICK_COLS * (BRICK_POINTS[0] + BRICK_POINTS[1] + BRICK_POINTS[2] + BRICK_POINTS[3]);
 
 const int PADDLE_SPEED = 6;
