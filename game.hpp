@@ -14,6 +14,7 @@ using const_brick_func = void (*)(const brick_data &brick, int row, int col);
 
 class game_data
 {
+protected:
     int active_player = 0;
     bool two_players = false;
     int score[2] = {0, 0};
@@ -38,16 +39,19 @@ class game_data
     void set_current_score(int score);
     int score_points(int points);
     void increment_volley_counter();
+    void set_ball_y_speed();
+    void reset_bricks(int player);
 
-public:
-    game_data();
-    game_data(int max_serves);
     void new_game();
-    void reset();
     void swap_players();
     void start_round();
     void end_round();
     void end_game();
+    void reset_ball_state();
+
+public:
+    game_data();
+    game_data(int max_serves);
 
     int get_active_player() const;
     paddle_data get_paddle() const;
@@ -60,19 +64,6 @@ public:
     int num_players() const;
 
     void bricks_map(int player, const_brick_func func) const;
-
-    void handle_wall_collision();
-    void handle_paddle_collision();
-    void handle_brick_collision();
-    void handle_ball_out_of_bounds();
-
-    void set_ball_y_speed();
-
-    void handle_serve_start();
-    void handle_paddle_input();
-    void handle_mode_start();
-
-    void update();
 };
 
 #endif

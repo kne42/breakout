@@ -27,75 +27,6 @@ void game_data::bricks_map(int player, const_brick_func func) const
 }
 
 /**
- * Brick-finder helpers.
- */
-
-int get_brick_row_by_y_from_top(int y)
-{
-    int start = BRICK_AREA_Y_START;
-    int end;
-
-    for (int i = 0; i < NUM_BRICK_ROWS; i++)
-    {
-        end = start + BRICK_HEIGHT + BRICK_GAP_Y;
-        if (y >= start && y <= end)
-            return i;
-        start = end;
-    }
-
-    return -1;
-}
-
-int get_brick_row_by_y_from_bottom(int y)
-{
-    int start = BRICK_AREA_Y_END;
-    int end;
-
-    for (int i = NUM_BRICK_ROWS - 1; i >= 0; i--)
-    {
-        end = start - BRICK_HEIGHT - BRICK_GAP_Y;
-        if (y <= start && y >= end)
-            return i;
-        start = end;
-    }
-
-    return -1;
-}
-
-int get_brick_col_by_x_from_left(int left, int right)
-{
-    int start = 0;
-    int end;
-
-    for (int i = 0; i < NUM_BRICK_COLS; i++)
-    {
-        end = start + BRICK_WIDTH + BRICK_GAP_X;
-        if ((left >= start && left <= end) || (right >= start && right <= end))
-            return i;
-        start = end;
-    }
-
-    return -1;
-}
-
-int get_brick_col_by_x_from_right(int left, int right)
-{
-    // this can be optimized by having a counterpart that searches right-to-left for when the ball is approaching from the right
-    int start = SCREEN_WIDTH;
-    int end;
-
-    for (int i = NUM_BRICK_COLS - 1; i >= 0; i--)
-    {
-        end = start - BRICK_WIDTH - BRICK_GAP_X;
-        if ((left <= start && left >= end) || (right <= start && right >= end))
-            return i;
-        start = end;
-    }
-
-    return -1;
-}
-
-/**
  * Brick map helpers.
  */
 
@@ -107,6 +38,11 @@ void init_brick(brick_data &brick, int row, int col)
 void reset_brick(brick_data &brick, int row, int col)
 {
     brick.reset();
+}
+
+void game_data::reset_bricks(int player)
+{
+    bricks_map(player, reset_brick);
 }
 
 game_data::game_data() : game_data(3) {}
@@ -149,212 +85,25 @@ void game_data::spawn_ball()
 
 void game_data::new_game()
 {
-    reset();
+    reset_ball_state();
 
     active_player = 0;
 
     score[0] = 0;
     score[1] = 0;
+    current_serve = 1;
 
     waiting_for_serve = true;
 
     for (int player = 0; player < num_players(); player++)
     {
-        current_serve = 1;
-        bricks_map(player, reset_brick);
+        reset_bricks(player);
     }
-}
-
-void game_data::handle_wall_collision()
-{
-    // check if moving towards wall so ball doesn't get infinitely stuck on the wall
-    const bool left = ball.is_moving_left() && ball.get_left() <= 0;
-    const bool right = ball.is_moving_right() && ball.get_right() >= SCREEN_WIDTH;
-
-    // left and right walls
-    if (left || right)
-    {
-        // do not reflect if in out of bounds area
-        if (DEBUG_NO_OUT_OF_BOUNDS || ball.get_top() < WALL_BOUNDS_END)
-            ball.reflect_x();
-    }
-
-    // top wall
-    if (ball.is_moving_up() && ball.get_top() <= DIVIDER_END)
-    {
-        ball.reflect_y();
-        ball_phasing = false;
-        if (!idle)
-        {
-            paddle.set_shrunken(true);
-            vslow = false;
-        }
-    }
-
-    // bottom wall
-    if (DEBUG_NO_OUT_OF_BOUNDS && ball.get_bottom() >= SCREEN_HEIGHT)
-    {
-        ball.reflect_y();
-        ball_phasing = false;
-    }
-}
-
-void game_data::handle_paddle_collision()
-{
-    paddle_section section = paddle.section_hit(ball);
-    if (section)
-    {
-        increment_volley_counter();
-        ball.reflect_y();
-        ball_phasing = false;
-
-        if (!idle)
-        {
-            if (!vslow)
-                ball.set_x_fast();
-            else if (section & INNER)
-                ball.set_x_slow();
-            else
-                ball.set_x_fast();
-
-            if (section & LEFT)
-                ball.set_moving_left();
-            else
-                ball.set_moving_right();
-        }
-    }
-}
-
-void game_data::handle_brick_collision()
-{
-    if (!ball_phasing)
-    {
-        int row = -1;
-        int col = -1;
-        // ball moving upwards so only need to check with top hitbox and vice versa
-        if (ball.is_moving_up())
-        {
-            const int y_edge = ball.get_top();
-            if (y_edge <= BRICK_AREA_Y_END && y_edge >= BRICK_AREA_Y_START)
-                row = get_brick_row_by_y_from_bottom(y_edge);
-        }
-        else
-        {
-            const int y_edge = ball.get_bottom();
-            if (y_edge <= BRICK_AREA_Y_END && y_edge >= BRICK_AREA_Y_START)
-                row = get_brick_row_by_y_from_top(y_edge);
-        }
-
-        // in brick area
-        if (row != -1)
-        {
-            // ball moving left so only check first from right and vice versa
-            if (ball.is_moving_left())
-            {
-                col = get_brick_col_by_x_from_right(ball.get_left(), ball.get_right());
-            }
-            else
-            {
-                col = get_brick_col_by_x_from_left(ball.get_left(), ball.get_right());
-            }
-
-            // brick hit
-            if (col != -1)
-            {
-                brick_data &brick = bricks[active_player][row][col];
-                if (!brick.is_broken())
-                {
-                    if (!idle && !waiting_for_serve)
-                    {
-                        brick.set_broken(true);
-                        score_points(BRICK_POINTS[row / 2]);
-
-                        // hit brick from top
-                        if (ball.is_moving_down())
-                            increment_volley_counter();
-
-                        if (get_current_score() == MAX_POINTS_PER_SCREEN)
-                        {
-                            bricks_map(active_player, reset_brick);
-                            waiting_for_serve = true;
-                        }
-                    }
-                    ball.reflect_y();
-                    ball_phasing = true;
-                }
-            }
-        }
-    }
-}
-
-void game_data::handle_ball_out_of_bounds()
-{
-    if (ball.get_top() > SCREEN_HEIGHT || ball.get_right() < 0 || ball.get_left() > SCREEN_WIDTH)
-        end_round();
-}
-
-void game_data::handle_paddle_input()
-{
-    if (key_down(LEFT_KEY))
-    {
-        paddle.move_left();
-    }
-    if (key_down(RIGHT_KEY))
-    {
-        paddle.move_right();
-    }
-}
-
-void game_data::handle_serve_start()
-{
-    if (key_released(SPACE_KEY))
-        start_round();
-}
-
-void game_data::update()
-{
-    handle_wall_collision();
-    if (ball.is_moving_down())
-        handle_paddle_collision();
-    handle_brick_collision();
-
-    if (!waiting_for_serve && !idle)
-        handle_ball_out_of_bounds();
-
-    process_events();
-
-    // handle ball move
-    if (!waiting_for_serve)
-    {
-        ball.move_next_pos();
-        set_ball_y_speed();
-    }
-    // handle player input
-    else
-        handle_serve_start();
-
-    if (!idle)
-        handle_paddle_input();
-    else
-        handle_mode_start();
-}
-
-void game_data::handle_mode_start()
-{
-    if (key_released(SPACE_KEY))
-    {
-        new_game();
-        set_idle(false);
-    }
-    if (key_down(LEFT_KEY))
-        two_players = false;
-    else if (key_down(RIGHT_KEY))
-        two_players = true;
 }
 
 void game_data::end_round()
 {
-    reset();
+    reset_ball_state();
 
     if (!two_players || active_player == 1)
         current_serve++;
@@ -384,7 +133,7 @@ void game_data::end_game()
     set_idle(true);
 }
 
-void game_data::reset()
+void game_data::reset_ball_state()
 {
     waiting_for_serve = true;
     vslow = true;

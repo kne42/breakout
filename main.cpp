@@ -1,12 +1,12 @@
 #include "splashkit.h"
 
 #include "constants.h"
-#include "game.hpp"
+#include "game-controller.hpp"
 #include "view.hpp"
 
 int main()
 {
-    game_data game;
+    game_controller game;
     unsigned long clock = 0;
 
     open_window("Breakout", SCREEN_WIDTH, SCREEN_HEIGHT);
