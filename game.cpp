@@ -159,7 +159,7 @@ void game_data::new_game()
 
     for (int player = 0; player < num_players(); player++)
     {
-        current_serve[player] = 1;
+        current_serve = 1;
         bricks_map(player, reset_brick);
     }
 }
@@ -342,16 +342,17 @@ void game_data::end_round()
 {
     reset();
 
-    current_serve[active_player]++;
-
-    if (two_players)
-    {
-        swap_players();
-    }
+    if (!two_players || active_player == 1)
+        current_serve++;
 
     if (get_serve() > max_serves)
     {
         end_game();
+    }
+
+    if (two_players)
+    {
+        swap_players();
     }
 }
 
@@ -386,7 +387,7 @@ int game_data::get_active_player() const
 
 int game_data::get_serve() const
 {
-    return current_serve[active_player];
+    return current_serve;
 }
 
 int game_data::get_score(int player) const

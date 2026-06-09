@@ -17,7 +17,7 @@ class game_data
     int active_player = 0;
     bool two_players = false;
     int score[2] = {0, 0};
-    unsigned short current_serve[2] = {1, 1};
+    unsigned short current_serve = 1;
     int max_serves;
 
     bool high_value_brick_hit;
