@@ -9,13 +9,14 @@ const bool DEBUG_MODE = false;
 int main()
 {
     game_data game;
+    unsigned long clock = 0;
 
     open_window("Breakout", SCREEN_WIDTH, SCREEN_HEIGHT);
 
     while (!quit_requested())
     {
         game.update();
-        draw_game(game);
+        draw_game(game, clock++ % 12 <= 4);
 
         if (DEBUG_MODE)
         {

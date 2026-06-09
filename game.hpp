@@ -42,9 +42,9 @@ class game_data
 public:
     game_data();
     game_data(int max_serves);
-    void new_game(bool two_players);
+    void new_game();
     void reset();
-    int swap_players();
+    void swap_players();
     void start_round();
     void end_round();
     void end_game();
@@ -57,6 +57,7 @@ public:
     int get_current_score() const;
     bool get_idle() const;
     bool is_waiting_for_serve() const;
+    int num_players() const;
 
     void bricks_map(int player, const_brick_func func) const;
 

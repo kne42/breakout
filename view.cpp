@@ -5,9 +5,12 @@
 #include "unit.hpp"
 #include "draw-digit.hpp"
 
-void draw_player(const game_data &game)
+void draw_player(const game_data &game, bool blink)
 {
-    int player = game.get_active_player() + 1;
+    if (game.get_idle() && blink)
+        return;
+
+    int player = game.num_players();
     draw_digit((digit)player, OTHER_COLOURS, PLAYER_MARGIN, PLAYER_LINE);
 }
 
@@ -30,10 +33,13 @@ void draw_score(int score, int x, int y)
     draw_digit((digit)digit_3, OTHER_COLOURS, x, y);
 }
 
-void draw_scores(const game_data &game)
+void draw_scores(const game_data &game, bool blink)
 {
-    draw_score(game.get_score(0), SCORE_MARGIN_1, SCORE_LINE);
-    draw_score(game.get_score(1), SCORE_MARGIN_2, SCORE_LINE);
+    const bool blinking = !game.get_idle() && blink;
+    if (!(blinking && game.get_active_player() == 0))
+        draw_score(game.get_score(0), SCORE_MARGIN_1, SCORE_LINE);
+    if (!(blinking && game.get_active_player() == 1))
+        draw_score(game.get_score(1), SCORE_MARGIN_2, SCORE_LINE);
 }
 
 void draw_unit(const unit &u, color colour)
@@ -61,7 +67,7 @@ void draw_vertical_walls(color colour, int y, int height)
     fill_rectangle(colour, SCREEN_WIDTH - WALL_WIDTH, y, WALL_WIDTH, height);
 }
 
-void draw_game(const game_data &game)
+void draw_game(const game_data &game, bool blink)
 {
     clear_screen(BACKGROUND_COLOUR);
 
@@ -92,17 +98,23 @@ void draw_game(const game_data &game)
     }
 
     // blue streak in walls
-    draw_vertical_walls(PADDLE_COLOUR, WALL_BOUNDS_END, 3 * PADDLE_HEIGHT - 2 * BRICK_GAP_Y);
+    draw_vertical_walls(PADDLE_COLOUR, BLUE_STREAK_START, BLUE_STREAK_END - BLUE_STREAK_START);
 
     // horizontal wall
     fill_rectangle(OTHER_COLOURS, WALL_WIDTH, DIVIDER_START, SCREEN_WIDTH - 2 * WALL_WIDTH, WALL_HEIGHT);
 
-    draw_player(game);
+    draw_player(game, blink);
     draw_serve_count(game);
-    draw_scores(game);
+    draw_scores(game, blink);
 
     game.bricks_map(game.get_active_player(), draw_brick);
     draw_unit(game.get_paddle(), PADDLE_COLOUR);
     if (!ball_rendered)
-        draw_ball(game, OTHER_COLOURS);
+    {
+        const int ball_bot = game.get_ball().get_bottom();
+        if (ball_bot >= BLUE_STREAK_START && ball_bot <= BLUE_STREAK_END)
+            draw_ball(game, PADDLE_COLOUR);
+        else
+            draw_ball(game, OTHER_COLOURS);
+    }
 }

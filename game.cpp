@@ -146,13 +146,9 @@ void game_data::spawn_ball()
     ball.respawn(rnd(BALL_SPAWN_BOUNDS_LEFT, BALL_SPAWN_BOUNDS_RIGHT), rnd(BALL_SPAWN_BOUNDS_TOP, BALL_SPAWN_BOUNDS_BOTTOM));
 }
 
-void game_data::new_game(bool two_players)
+void game_data::new_game()
 {
     reset();
-
-    this->two_players = two_players;
-
-    int num_players = two_players ? 2 : 1;
 
     active_player = 0;
 
@@ -161,7 +157,7 @@ void game_data::new_game(bool two_players)
 
     waiting_for_serve = true;
 
-    for (int player = 0; player < num_players; player++)
+    for (int player = 0; player < num_players(); player++)
     {
         current_serve[player] = 1;
         bricks_map(player, reset_brick);
@@ -177,8 +173,8 @@ void game_data::handle_wall_collision()
     // left and right walls
     if (left || right)
     {
-        // out of bounds area below paddle
-        if (ball.get_top() < paddle.get_bottom())
+        // do not reflect if in out of bounds area
+        if (ball.get_top() < WALL_BOUNDS_END)
             ball.reflect_x();
     }
 
@@ -333,9 +329,13 @@ void game_data::handle_mode_start()
 {
     if (key_released(SPACE_KEY))
     {
-        new_game(false);
+        new_game();
         set_idle(false);
     }
+    if (key_down(LEFT_KEY))
+        two_players = false;
+    else if (key_down(RIGHT_KEY))
+        two_players = true;
 }
 
 void game_data::end_round()
@@ -343,6 +343,11 @@ void game_data::end_round()
     reset();
 
     current_serve[active_player]++;
+
+    if (two_players)
+    {
+        swap_players();
+    }
 
     if (get_serve() > max_serves)
     {
@@ -451,4 +456,14 @@ void game_data::set_ball_y_speed()
 bool game_data::is_waiting_for_serve() const
 {
     return waiting_for_serve;
+}
+
+int game_data::num_players() const
+{
+    return two_players ? 2 : 1;
+}
+
+void game_data::swap_players()
+{
+    active_player = active_player == 0 ? 1 : 0;
 }

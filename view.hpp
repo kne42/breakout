@@ -26,6 +26,9 @@ const int SCORE_LINE = PLAYER_LINE + DIGIT_HEIGHT + DIGIT_SPACING;
 const int SCORE_MARGIN_1 = PLAYER_MARGIN + DIGIT_WIDTH + DIGIT_SPACING;
 const int SCORE_MARGIN_2 = SERVE_MARGIN + DIGIT_WIDTH + DIGIT_SPACING;
 
-void draw_game(const game_data &game);
+const int BLUE_STREAK_START = PADDLE_Y - PADDLE_HEIGHT + BRICK_GAP_Y;
+const int BLUE_STREAK_END = BLUE_STREAK_START + 3 * PADDLE_HEIGHT - 2 * BRICK_GAP_Y;
+
+void draw_game(const game_data &game, bool blink = false);
 
 #endif
