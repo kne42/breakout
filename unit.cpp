@@ -19,32 +19,32 @@ coordinates unit::get_pos() const
     return pos;
 }
 
-double unit::get_x() const
+int unit::get_x() const
 {
     return pos.x;
 }
 
-double unit::get_y() const
+int unit::get_y() const
 {
     return pos.y;
 }
 
-double unit::get_left() const
+int unit::get_left() const
 {
     return get_x();
 }
 
-double unit::get_right() const
+int unit::get_right() const
 {
     return get_x() + get_width();
 }
 
-double unit::get_top() const
+int unit::get_top() const
 {
     return get_y();
 }
 
-double unit::get_bottom() const
+int unit::get_bottom() const
 {
     return get_y() + get_height();
 }
@@ -66,11 +66,11 @@ void unit::set_pos(const coordinates &pos)
     this->pos = pos;
 }
 
-void unit::set_x(const double &x)
+void unit::set_x(const int &x)
 {
     pos.x = x;
 }
-void unit::set_y(const double &y)
+void unit::set_y(const int &y)
 {
     pos.y = y;
 }

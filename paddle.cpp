@@ -20,7 +20,7 @@ paddle_data::paddle_data()
  * Getters
  */
 
-double paddle_data::get_x() const
+int paddle_data::get_x() const
 {
     if (idle)
         return 0;
