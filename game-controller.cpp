@@ -9,69 +9,14 @@
  * Helpers
  */
 
-int get_brick_row_by_y_from_top(int y)
+int calc_brick_row(int y)
 {
-    int start = BRICK_AREA_Y_START;
-    int end;
-
-    for (int i = 0; i < NUM_BRICK_ROWS; i++)
-    {
-        end = start + BRICK_HEIGHT + BRICK_GAP_Y;
-        if (y >= start && y <= end)
-            return i;
-        start = end;
-    }
-
-    return -1;
+    return (y - BRICK_AREA_Y_START) / (BRICK_HEIGHT + BRICK_GAP_Y);
 }
 
-int get_brick_row_by_y_from_bottom(int y)
+int calc_brick_col(int x)
 {
-    int start = BRICK_AREA_Y_END;
-    int end;
-
-    for (int i = NUM_BRICK_ROWS - 1; i >= 0; i--)
-    {
-        end = start - BRICK_HEIGHT - BRICK_GAP_Y;
-        if (y <= start && y >= end)
-            return i;
-        start = end;
-    }
-
-    return -1;
-}
-
-int get_brick_col_by_x_from_left(int left, int right)
-{
-    int start = 0;
-    int end;
-
-    for (int i = 0; i < NUM_BRICK_COLS; i++)
-    {
-        end = start + BRICK_WIDTH + BRICK_GAP_X;
-        if ((left >= start && left <= end) || (right >= start && right <= end))
-            return i;
-        start = end;
-    }
-
-    return -1;
-}
-
-int get_brick_col_by_x_from_right(int left, int right)
-{
-    // this can be optimized by having a counterpart that searches right-to-left for when the ball is approaching from the right
-    int start = SCREEN_WIDTH;
-    int end;
-
-    for (int i = NUM_BRICK_COLS - 1; i >= 0; i--)
-    {
-        end = start - BRICK_WIDTH - BRICK_GAP_X;
-        if ((left <= start && left >= end) || (right <= start && right >= end))
-            return i;
-        start = end;
-    }
-
-    return -1;
+    return x / (BRICK_WIDTH + BRICK_GAP_X);
 }
 
 /**
@@ -149,61 +94,37 @@ void game_controller::handle_brick_collision()
 {
     if (!ball_phasing)
     {
-        int row = -1;
-        int col = -1;
-        // ball moving upwards so only need to check with top hitbox and vice versa
-        if (ball.is_moving_up())
-        {
-            const int y_edge = ball.get_top();
-            if (y_edge <= BRICK_AREA_Y_END && y_edge >= BRICK_AREA_Y_START)
-                row = get_brick_row_by_y_from_bottom(y_edge);
-        }
-        else
-        {
-            const int y_edge = ball.get_bottom();
-            if (y_edge <= BRICK_AREA_Y_END && y_edge >= BRICK_AREA_Y_START)
-                row = get_brick_row_by_y_from_top(y_edge);
-        }
+        const int y_leading = ball.is_moving_up() ? ball.get_top() : ball.get_bottom();
+        const int x_middle = ball.get_middle().x;
+
+        const int row = calc_brick_row(y_leading);
+        const int col = calc_brick_col(x_middle);
 
         // in brick area
-        if (row != -1)
+        if (row >= 0 && row < NUM_BRICK_ROWS && col >= 0 && col < NUM_BRICK_COLS)
         {
-            // ball moving left so only check first from right and vice versa
-            if (ball.is_moving_left())
+            brick_data &brick = bricks[active_player][row][col];
+            if (!brick.is_broken())
             {
-                col = get_brick_col_by_x_from_right(ball.get_left(), ball.get_right());
-            }
-            else
-            {
-                col = get_brick_col_by_x_from_left(ball.get_left(), ball.get_right());
-            }
-
-            // brick hit
-            if (col != -1)
-            {
-                brick_data &brick = bricks[active_player][row][col];
-                if (!brick.is_broken())
+                if (!idle && !waiting_for_serve)
                 {
-                    if (!idle && !waiting_for_serve)
+                    brick.set_broken(true);
+                    brick_points points = BRICK_POINTS[row / 2];
+                    score_points(points);
+                    play_brick_hit(points);
+
+                    // hit brick from top
+                    if (ball.is_moving_down())
+                        increment_volley_counter();
+
+                    if (get_current_score() == MAX_POINTS_PER_SCREEN)
                     {
-                        brick.set_broken(true);
-                        brick_points points = BRICK_POINTS[row / 2];
-                        score_points(points);
-                        play_brick_hit(points);
-
-                        // hit brick from top
-                        if (ball.is_moving_down())
-                            increment_volley_counter();
-
-                        if (get_current_score() == MAX_POINTS_PER_SCREEN)
-                        {
-                            reset_bricks(active_player);
-                            waiting_for_serve = true;
-                        }
+                        reset_bricks(active_player);
+                        waiting_for_serve = true;
                     }
-                    ball.reflect_y();
-                    ball_phasing = true;
                 }
+                ball.reflect_y();
+                ball_phasing = true;
             }
         }
     }
