@@ -5,9 +5,9 @@
 
 enum speed
 {
-    SPEED_SLOW = 1,
-    SPEED_MEDIUM = 2,
-    SPEED_FAST = 3,
+    SPEED_SLOW = 2,
+    SPEED_MEDIUM = 3,
+    SPEED_FAST = 4,
 };
 
 class ball_data : public unit
@@ -37,7 +37,9 @@ public:
     void reflect_y();
 
     bool is_moving_up() const;
+    bool is_moving_down() const;
     bool is_moving_left() const;
+    bool is_moving_right() const;
 
     void set_moving_up();
     void set_moving_down();

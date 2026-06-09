@@ -74,9 +74,18 @@ bool ball_data::is_moving_up() const
     return y_mod < 0;
 }
 
+bool ball_data::is_moving_down() const
+{
+    return y_mod > 0;
+}
+
 bool ball_data::is_moving_left() const
 {
     return x_mod < 0;
+}
+bool ball_data::is_moving_right() const
+{
+    return x_mod > 0;
 }
 
 void ball_data::set_moving_up()

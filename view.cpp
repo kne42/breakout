@@ -20,7 +20,7 @@ void draw_serve_count(const game_data &game)
 void draw_score(int score, int x, int y)
 {
     const int digit_1 = score / 100;
-    const int digit_2 = score % 100;
+    const int digit_2 = (score % 100) / 10;
     const int digit_3 = score % 10;
 
     draw_digit((digit)digit_1, OTHER_COLOURS, x, y);
@@ -39,6 +39,12 @@ void draw_scores(const game_data &game)
 void draw_unit(const unit &u, color colour)
 {
     fill_rectangle(colour, u.get_x(), u.get_y(), u.get_width(), u.get_height());
+}
+
+void draw_ball(const game_data &game, color colour)
+{
+    if (!game.is_waiting_for_serve())
+        draw_unit(game.get_ball(), colour);
 }
 
 void draw_brick(const brick_data &brick, int row, int col)
@@ -78,7 +84,7 @@ void draw_game(const game_data &game)
         // colour the ball if in brick area
         if (!ball_rendered && ball_y >= y_start && ball_y < y_start + height)
         {
-            draw_unit(game.get_ball(), colour);
+            draw_ball(game, colour);
             ball_rendered = true;
         }
 
@@ -98,5 +104,5 @@ void draw_game(const game_data &game)
     game.bricks_map(game.get_active_player(), draw_brick);
     draw_unit(game.get_paddle(), PADDLE_COLOUR);
     if (!ball_rendered)
-        draw_unit(game.get_ball(), OTHER_COLOURS);
+        draw_ball(game, OTHER_COLOURS);
 }

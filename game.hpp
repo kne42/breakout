@@ -14,17 +14,19 @@ using const_brick_func = void (*)(const brick_data &brick, int row, int col);
 
 class game_data
 {
-    int active_player;
-    bool two_players;
-    bool level_two[2];
-    int score[2];
-    unsigned short current_serve[2];
+    int active_player = 0;
+    bool two_players = false;
+    int score[2] = {0, 0};
+    unsigned short current_serve[2] = {1, 1};
     int max_serves;
 
+    bool high_value_brick_hit;
+    int volley_counter;
+
     bool idle;
-    bool vslow;
-    bool serve_wait;
-    bool ball_phasing;
+    bool vslow = true;
+    bool waiting_for_serve = false;
+    bool ball_phasing = false;
 
     brick_data bricks[2][NUM_BRICK_ROWS][NUM_BRICK_COLS];
     ball_data ball;
@@ -32,6 +34,10 @@ class game_data
 
     void set_idle(bool idle);
     void bricks_map(int player, brick_func func);
+    void spawn_ball();
+    void set_current_score(int score);
+    int score_points(int points);
+    void increment_volley_counter();
 
 public:
     game_data();
@@ -39,21 +45,31 @@ public:
     void new_game(bool two_players);
     void reset();
     int swap_players();
-    void new_round();
+    void start_round();
+    void end_round();
+    void end_game();
 
     int get_active_player() const;
     paddle_data get_paddle() const;
     ball_data get_ball() const;
     int get_serve() const;
     int get_score(int player) const;
+    int get_current_score() const;
+    bool get_idle() const;
+    bool is_waiting_for_serve() const;
 
     void bricks_map(int player, const_brick_func func) const;
 
     void handle_wall_collision();
     void handle_paddle_collision();
     void handle_brick_collision();
+    void handle_ball_out_of_bounds();
 
+    void set_ball_y_speed();
+
+    void handle_serve_start();
     void handle_paddle_input();
+    void handle_mode_start();
 
     void update();
 };
