@@ -178,6 +178,13 @@ void game_controller::handle_mode_start()
 
 void game_controller::update()
 {
+    process_events();
+
+    // handle paddle movement
+    if (!idle)
+        handle_paddle_input();
+
+    // check for collisions
     handle_wall_collision();
     if (ball.is_moving_down())
         handle_paddle_collision();
@@ -186,20 +193,17 @@ void game_controller::update()
     if (!waiting_for_serve && !idle)
         handle_ball_out_of_bounds();
 
-    process_events();
-
-    // handle ball move
-    if (!waiting_for_serve)
+    // handle serve
+    if (waiting_for_serve)
+        handle_serve_start();
+    else
     {
+        // handle ball move
         ball.move_next_pos();
         set_ball_y_speed();
     }
-    // handle player input
-    else
-        handle_serve_start();
 
-    if (!idle)
-        handle_paddle_input();
-    else
+    // handle mode
+    if (idle)
         handle_mode_start();
 }
