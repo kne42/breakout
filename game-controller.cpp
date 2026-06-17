@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "splashkit.h"
 
 #include "audio.h"
@@ -94,37 +96,50 @@ void game_controller::handle_brick_collision()
 {
     if (!ball_phasing)
     {
-        const int y_leading = ball.is_moving_up() ? ball.get_top() : ball.get_bottom();
-        const int x_middle = ball.get_middle().x;
+        const int row_bottom = calc_brick_row(ball.get_bottom());
+        const int row_top = calc_brick_row(ball.get_top());
 
-        const int row = calc_brick_row(y_leading);
-        const int col = calc_brick_col(x_middle);
+        const int col_left = calc_brick_col(ball.get_left());
+        const int col_right = calc_brick_col(ball.get_right());
 
-        // in brick area
-        if (row >= 0 && row < NUM_BRICK_ROWS && col >= 0 && col < NUM_BRICK_COLS)
+        int min_row = std::max(0, std::min(row_top, row_bottom));
+        int max_row = std::min(NUM_BRICK_ROWS - 1, std::max(row_top, row_bottom));
+
+        int min_col = std::max(0, std::min(col_left, col_right));
+        int max_col = std::min(NUM_BRICK_COLS - 1, std::max(col_left, col_right));
+
+        if (min_row > max_row || min_col > max_col)
+            return;
+
+        // only perform check in possible brick overlap areas
+        for (int row = max_row; row >= min_row; row--)
         {
-            brick_data &brick = bricks[active_player][row][col];
-            if (!brick.is_broken())
+            for (int col = max_col; col >= min_col; col--)
             {
-                if (!idle && !waiting_for_serve)
+                brick_data &brick = bricks[active_player][row][col];
+                if (!brick.is_broken() && brick.check_collision(ball))
                 {
-                    brick.set_broken(true);
-                    brick_points points = BRICK_POINTS[row / 2];
-                    score_points(points);
-                    play_brick_hit(points);
-
-                    // hit brick from top
-                    if (ball.is_moving_down())
-                        increment_volley_counter();
-
-                    if (get_current_score() == MAX_POINTS_PER_SCREEN)
+                    if (!idle && !waiting_for_serve)
                     {
-                        reset_bricks(active_player);
-                        waiting_for_serve = true;
+                        brick.set_broken(true);
+                        brick_points points = BRICK_POINTS[row / 2];
+                        score_points(points);
+                        play_brick_hit(points);
+
+                        // hit brick from top
+                        if (ball.is_moving_down())
+                            increment_volley_counter();
+
+                        if (get_current_score() == MAX_POINTS_PER_SCREEN)
+                        {
+                            reset_bricks(active_player);
+                            waiting_for_serve = true;
+                        }
                     }
+                    ball.reflect_y();
+                    ball_phasing = true;
+                    return;
                 }
-                ball.reflect_y();
-                ball_phasing = true;
             }
         }
     }

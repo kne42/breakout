@@ -82,3 +82,15 @@ void unit::set_height(const int &height)
 {
     this->height = height;
 }
+
+/**
+ * Helpers
+ */
+
+bool unit::check_collision(const unit &u) const
+{
+    return !(get_right() < u.get_left() ||
+             get_left() > u.get_right() ||
+             get_bottom() < u.get_top() ||
+             get_top() > u.get_bottom());
+}

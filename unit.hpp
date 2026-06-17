@@ -32,6 +32,8 @@ public:
     virtual int get_top() const;
     virtual int get_bottom() const;
     virtual coordinates get_middle() const;
+
+    virtual bool check_collision(const unit &u) const;
 };
 
 #endif
