@@ -85,7 +85,9 @@ paddle_section paddle_data::section_hit(const unit &u)
     const bool left_in = u.get_left() >= get_left() && u.get_left() <= get_right();
     const bool in_horizontal_space = left_in || right_in;
     // no need to check top overlap since ball can only come from the top
-    const bool in_vertical_space = u.get_bottom() >= get_top() && u.get_bottom() <= get_bottom();
+    const bool bottom_in = u.get_bottom() >= get_top() && u.get_bottom() <= get_bottom();
+    const bool top_in = u.get_top() >= get_top() && u.get_top() <= get_bottom();
+    const bool in_vertical_space = bottom_in || top_in;
 
     if (in_vertical_space && in_horizontal_space)
     {
