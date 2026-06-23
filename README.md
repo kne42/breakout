@@ -4,17 +4,23 @@ Original Atari Breakout recreated in C++.
 
 You must have [SplashKit](https://splashkit.io/) installed.
 
+First setup the build:
+```bash
+mkdir build
+cmake -S . -B build
+```
+
 To build this run:
 ```bash
-cmake --build .
+cmake --build build
 ```
 
 Then to run it:
 ```bash
-./breakout
+build/breakout
 ```
 
 Or if on Windows:
 ```bash
-breakout.exe
+build\breakout.exe
 ```

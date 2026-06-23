@@ -22,3 +22,7 @@ add_executable(breakout
 target_link_libraries(breakout PRIVATE
     splashkit
 )
+
+file(COPY ${CMAKE_SOURCE_DIR}/sounds
+    DESTINATION ${CMAKE_BINARY_DIR}
+)
